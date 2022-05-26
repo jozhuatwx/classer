@@ -1,0 +1,75 @@
+<mat-toolbar class="secondary-toolbar">
+  <mat-toolbar-row class="secondary-toolbar">
+      <form [formGroup]="updateForm">
+        <mat-form-field>
+          <mat-label class="mat-caption">Session Name</mat-label>
+          <input matInput type="text" name="sessionName" formControlName="sessionName" [errorStateMatcher]="matcher">
+          <mat-error *ngIf="updateForm.get('sessionName')?.hasError('required')" class="mat-caption">Module name is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="notes">
+          <mat-label class="mat-caption">Notes</mat-label>
+          <textarea matInput formControlName="note" placeholder="How was the class?"></textarea>
+        </mat-form-field>
+      </form>
+      <span class="toolbar-spacer"></span>
+      <div *ngIf="this.updateForm.enabled; else noUpdate" class="buttons-container">
+        <button mat-stroked-button color="warn" (click)="this.updateForm.disable()" [disabled]="updating">
+          <mat-icon>cancel</mat-icon>
+          <span> Cancel</span>
+        </button>
+        <button mat-raised-button color="accent" (click)="update()" [disabled]="updating">
+          <mat-spinner *ngIf="updating; else notUpdating" color="accent" [diameter]="17"></mat-spinner>
+        </button>
+        <ng-template #notUpdating>
+          <mat-icon>save</mat-icon>
+          <span> Update</span>
+        </ng-template>
+      </div>
+      <ng-template #noUpdate>
+        <div class="buttons-container">
+          <button mat-stroked-button color="warn" (click)="confirmDelete()" [disabled]="deleting">
+            <mat-spinner *ngIf="deleting; else notDeleting" color="warn" [diameter]="17"></mat-spinner>
+          </button>
+          <ng-template #notDeleting>
+            <mat-icon>delete</mat-icon>
+            <span> Delete</span>
+          </ng-template>
+          <button mat-stroked-button color="accent" (click)="this.updateForm.enable()" [disabled]="deleting">
+            <mat-icon>edit</mat-icon>
+            <span> Edit</span>
+          </button>
+        </div>
+      </ng-template>
+  </mat-toolbar-row>
+  <mat-toolbar-row class="secondary-toolbar">
+    <span class="mat-caption">{{startDateTime | date: 'short'}}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<hr>
+
+<div class="spinner-container" *ngIf="loading[0] || loading[1]; else accordion">
+  <mat-spinner color="primary"></mat-spinner>
+</div>
+
+<ng-template #accordion>
+  <mat-accordion>
+    <ng-template [ngIf]="snapshots.length > 0">
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Summary</mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-snapshot-card [snapshots]="snapshots"></app-snapshot-card>
+      </mat-expansion-panel>
+    </ng-template>
+  
+    <mat-expansion-panel [expanded]="snapshots.length == 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Add Snapshot</mat-panel-title>
+        <mat-panel-description *ngIf="captureStarted">System is recording...</mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <app-snapshot-camera [sessionId]="id" (newSnapshot)="this.snapshots = this.snapshots.concat($event)" (startedChanges)="captureStarted = $event"></app-snapshot-camera>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>

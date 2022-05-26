@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+  <button *ngIf="userApiService.isAuthenticated()" mat-icon-button (click)="sidenavOpen = !sidenavOpen">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>ClassER</span>
+
+  <span class="toolbar-spacer"></span>
+
+  <button *ngIf="userApiService.isAuthenticated()" mat-flat-button color="primary" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span> Logout</span>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav *ngIf="userApiService.isAuthenticated()" [mode]="mode" [(opened)]="sidenavOpen">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let link of links" [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListIcon>{{link.icon}}</mat-icon>
+        <span matLine>{{link.name}}</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

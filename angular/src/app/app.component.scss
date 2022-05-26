@@ -1,0 +1,12 @@
+mat-sidenav-container {
+  height: var(--content-container-height);
+}
+
+mat-nav-list {
+  width: 236px;
+}
+
+mat-sidenav-content {
+  height: var(--content-height);
+  padding: var(--content-containter-padding);
+}

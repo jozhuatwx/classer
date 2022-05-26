@@ -1,0 +1,23 @@
+<mat-toolbar class="secondary-toolbar">
+  <span>Sessions</span>
+  <mat-form-field>
+    <mat-label class="mat-caption">Search</mat-label>
+    <input matInput [(ngModel)]="keyword" (keyup)="search()">
+  </mat-form-field>
+  <span class="toolbar-spacer"></span>
+  <button mat-stroked-button color="accent" (click)="create()">
+    <mat-icon>add</mat-icon>
+    <span> Add</span>
+  </button>
+</mat-toolbar>
+<hr>
+
+<div class="spinner-container" *ngIf="loading; else gallery">
+  <mat-spinner color="primary"></mat-spinner>
+</div>
+
+<ng-template #gallery>
+  <div class="gallery">
+    <app-session-card *ngFor="let session of filteredSessions" [session]="session"></app-session-card>
+  </div>
+</ng-template>

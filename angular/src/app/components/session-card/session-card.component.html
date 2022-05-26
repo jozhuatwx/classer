@@ -1,0 +1,38 @@
+<mat-card *ngIf="session && session.id; else createSession">
+  <mat-card-title>{{session.sessionName}}</mat-card-title>
+  <mat-card-subtitle>{{session.startDateTime | date: "mediumDate"}}</mat-card-subtitle>
+  <mat-card-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Start Time</mat-label>
+      <input matInput disabled type="time" [ngModel]="session.startDateTime | date: 'HH:mm'">
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>Notes</mat-label>
+      <textarea matInput disabled [ngModel]="session.note"></textarea>
+    </mat-form-field>
+    <br>
+    <a mat-stroked-button [href]="'/sessions/' + session.id" [routerLink]="'/sessions/' + session.id">View Session</a>
+  </mat-card-content>
+</mat-card>
+<ng-template #createSession>
+  <mat-card>
+    <form [formGroup]="createForm">
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Session Name</mat-label>
+          <input matInput type="text" formControlName="sessionName" [errorStateMatcher]="matcher">
+          <mat-error *ngIf="createForm.get('sessionName')?.hasError('required')" class="mat-caption">Session name is required</mat-error>
+        </mat-form-field>
+        <br><br>
+        <button mat-raised-button color="accent" (click)="create()" [disabled]="creating">
+          <mat-spinner *ngIf="creating; else notCreating" color="accent" [diameter]="17"></mat-spinner>
+          <ng-template #notCreating>
+            <mat-icon>save</mat-icon>
+            <span> Create</span>
+          </ng-template>
+        </button>
+      </mat-card-content>
+    </form>
+  </mat-card>
+</ng-template>

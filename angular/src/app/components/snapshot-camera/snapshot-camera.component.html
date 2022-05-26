@@ -1,0 +1,58 @@
+<div class="viewfinder-container">
+  <video #viewfinder [width]="width" [height]="height">Video stream not available.</video>
+</div>
+
+<div class="side">
+  <h1>Options</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Interval</mat-label>
+    <input matInput type="number" name="interval" [formControl]="intervalControl" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="intervalControl.hasError('min')">Minimum value is 1 minute</mat-error>
+    <span matSuffix>minutes</span>
+  </mat-form-field>
+  <br><br>
+  <div class="buttons-container">
+    <button mat-stroked-button color="accent" (click)="createSnapshot()" [disabled]="creating">
+      <mat-spinner *ngIf="creating; else notCreating" color="accent" [diameter]="17"></mat-spinner>
+    </button>
+    <ng-template #notCreating>
+      <mat-icon>video_call</mat-icon>
+      <span> Manual Add Snapshot</span>
+    </ng-template>
+
+    <button *ngIf="intervalControl.disabled; else stopped" mat-raised-button color="warn" (click)="stop()">
+      <mat-icon>videocam_off</mat-icon>
+      <span> Stop</span>
+    </button>
+
+    <ng-template #stopped>
+      <button mat-raised-button color="accent" (click)="start()">
+        <mat-icon>videocam</mat-icon>
+        <span> Start</span>
+      </button>
+    </ng-template>
+  </div>
+
+  <ng-template [ngIf]="summaryEmotion.length > 0">
+    <hr>
+    <h1>Suggestions</h1>
+    <h3>{{suggestion}}</h3>
+
+    <hr>
+    <h1>Summary</h1>
+    <table mat-table matSort [dataSource]="summaryDataSource">
+      <ng-container matColumnDef="emotion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Emotion</th>
+        <td mat-cell *matCellDef="let item">{{item.emotion}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value (%)</th>
+        <td mat-cell *matCellDef="let item">{{item.value * 100 | number: '1.2-2'}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </ng-template>
+</div>

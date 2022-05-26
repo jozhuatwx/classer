@@ -1,0 +1,78 @@
+<mat-card>
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="Login">
+      <form [formGroup]="loginForm">
+        <mat-card-content>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email" formControlName="email" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')">Please enter a valid email address</mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">Email is required</mat-error>
+          </mat-form-field>
+          <br><br>
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" name="password" formControlName="password" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
+          </mat-form-field>
+          <br><br>
+          <mat-checkbox formControlName="stayLoggedIn">Stay logged in</mat-checkbox>
+          <br><br>
+          <button mat-raised-button color="accent" type="submit" (click)="login()" [disabled]="loggingIn || registering">
+            <mat-spinner *ngIf="loggingIn; else notLoggingIn" color="accent" [diameter]="17"></mat-spinner>
+            <ng-template #notLoggingIn>
+              Login
+            </ng-template>
+          </button>
+        </mat-card-content>
+      </form>
+    </mat-tab>
+    <mat-tab label="Register">
+      <form [formGroup]="registerForm">
+        <mat-card-content>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" formControlName="name" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="registerForm.get('name')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
+          <br><br>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput type="text" name="email" formControlName="email" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="registerForm.get('email')?.hasError('email') && !registerForm.get('email')?.hasError('required')">Please enter a valid email address</mat-error>
+            <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
+          </mat-form-field>
+          <div formGroupName="newPassword">
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hideNewPassword ? 'password' : 'text'" name="newPassword" formControlName="newPassword" [errorStateMatcher]="matcher">
+              <mat-icon matSuffix (click)="hideNewPassword = !hideNewPassword">{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="registerForm.get('newPassword.newPassword')?.hasError('required')">Password is required</mat-error>
+              <mat-error *ngIf="registerForm.get('newPassword.newPassword')?.hasError('pattern')">Password is must be at least 8 characters and contains at least 1 uppercase letter, 1 lowercase letter, and 1 number.</mat-error>
+            </mat-form-field>
+            <br><br>
+            <mat-form-field appearance="fill">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" name="confirmNewPassword" formControlName="confirmNewPassword" [errorStateMatcher]="passwordMatcher">
+              <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="registerForm.get('newPassword')?.hasError('notSame')">Password is not same</mat-error>
+            </mat-form-field>
+          </div>
+          <br>
+          <mat-checkbox formControlName="stayLoggedIn">Stay logged in</mat-checkbox>
+          <br><br>
+          <button mat-raised-button color="accent" type="submit" (click)="register()" [disabled]="registering || loggingIn">
+            <mat-spinner *ngIf="registering; else notRegistering" color="accent" [diameter]="17"></mat-spinner>
+            <ng-template #notRegistering>
+              Register
+            </ng-template>
+          </button>
+        </mat-card-content>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

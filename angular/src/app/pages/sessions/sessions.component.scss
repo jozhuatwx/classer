@@ -1,0 +1,17 @@
+mat-form-field {
+  margin-left: 15px !important;
+  padding: 0 !important;
+}
+
+.gallery {
+  margin-top: 10px;
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+}
+
+@media only screen and (min-width: 550px) {
+  .gallery {
+    flex-direction: row;
+  }
+}

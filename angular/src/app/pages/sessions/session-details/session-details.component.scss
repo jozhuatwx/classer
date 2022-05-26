@@ -1,0 +1,19 @@
+mat-form-field {
+  padding: 0 !important;
+}
+
+.notes {
+  width: 50vw;
+}
+
+@media only screen and (max-width: 550px) {
+  mat-toolbar-row {
+    flex-direction: column;
+  }
+
+  form,
+  mat-form-field,
+  .notes {
+    width: 100%;
+  }
+}

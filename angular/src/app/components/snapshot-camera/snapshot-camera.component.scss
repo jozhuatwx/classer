@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+}
+
+.viewfinder-container {
+  text-align: center;
+}
+
+.side {
+  table,
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  :host {
+    flex-flow: row wrap;
+  }
+
+  .viewfinder-container {
+    width: 70%;
+  }
+
+  .side {
+    width: calc(30% - 10px);
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .buttons-container {
+    button {
+      width: 100%;
+    }
+
+    button + button {
+      margin: 10px 0;
+    }
+  } 
+}

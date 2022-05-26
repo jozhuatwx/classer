@@ -1,0 +1,76 @@
+<mat-card>
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="Edit">
+      <form [formGroup]="updateForm">
+        <mat-card-content>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>ID</mat-label>
+            <input matInput disabled type="text" name="id" [value]="user.id">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput disabled type="email" name="email" [value]="user.email">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" formControlName="name" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="updateForm.get('name')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" name="password" formControlName="password" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="updateForm.get('password')?.hasError('required')">Password is required</mat-error>
+          </mat-form-field>
+          <br><br>
+          <mat-slide-toggle name="updatePassword" formControlName="updatePassword" (change)="updatePasswordToggle($event)">Update Password</mat-slide-toggle>
+          <ng-template [ngIf]="this.updateForm.get('updatePassword')?.value">
+            <div formGroupName="newPassword">
+              <br><br>
+              <mat-form-field appearance="fill">
+                <mat-label>New Password</mat-label>
+                <input matInput [type]="hideNewPassword ? 'password' : 'text'" name="newPassword" formControlName="newPassword" [errorStateMatcher]="matcher">
+                <mat-icon matSuffix (click)="hideNewPassword = !hideNewPassword">{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="updateForm.get('newPassword.newPassword')?.hasError('required')">Password is required</mat-error>
+                <mat-error *ngIf="updateForm.get('newPassword.newPassword')?.hasError('pattern')">Password is must be at least 8 characters and contains at least 1 uppercase letter, 1 lowercase letter, and 1 number.</mat-error>
+              </mat-form-field>
+              <br><br>
+              <mat-form-field appearance="fill">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" name="confirmNewPassword" formControlName="confirmNewPassword" [errorStateMatcher]="newPasswordMatcher">
+                <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="updateForm.get('newPassword')?.hasError('notSame')">Password is not same</mat-error>
+              </mat-form-field>
+            </div>
+          </ng-template>
+          <br><br>
+          <button mat-raised-button color="accent" type="submit" (click)="update()" [disabled]="updating || deleting">
+            <mat-spinner *ngIf="updating; else notUpdating" color="accent" [diameter]="17"></mat-spinner>
+            <ng-template #notUpdating>
+              <mat-icon>save</mat-icon>
+              <span> Update</span>
+            </ng-template>
+          </button>
+        </mat-card-content>
+      </form>
+    </mat-tab>
+    <mat-tab label="Delete">
+      <mat-card-content>
+        <br>
+        WARNING: Deleted account cannot be recovered. Are you sure?
+        <br><br>
+        <button mat-raised-button color="warn" type="submit" (click)="confirmDelete()" [disabled]="deleting || updating">
+          <mat-spinner *ngIf="deleting; else notDeleting" color="accent" [diameter]="17"></mat-spinner>
+          <ng-template #notDeleting>
+            <mat-icon>delete</mat-icon>
+          <span> Delete</span>
+          </ng-template>
+        </button>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
